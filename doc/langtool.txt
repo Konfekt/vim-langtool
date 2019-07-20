@@ -1,0 +1,97 @@
+              *vim-langtool*            *langtool*
+===========================================================================
+Intro ~
+
+This Vim plug-in lists all grammar mistakes found by LanguageTool in the
+quickfix (or local) list.
+
+Setup ~
+
+Download and unpack LanguageTool, say into the folder ~/LanguageTool, and add
+to your vimrc the line
+
+>
+  let g:langtool_jar = '~/LanguageTool/languagetool-commandline.jar'
+<
+
+where the right-hand side, ~/LanguageTool/languagetool-commandline.jar, is the
+path of the file languagetool-commandline.jar.
+
+Usage ~
+
+The command
+>
+  LangTool
+<
+populates the location-list with all grammar mistakes found by LanguageTool.
+The location-list window that lists them can then be opened by lwindow;
+these can then be jumped to by the normal mode mappings [g and ]g (where
+g stands for Grammar mistake).
+
+To automatically open the location-list window after LangTool, add
+
+>
+  autocmd QuickFixCmdPost lmake lwindow
+<
+
+to your vimrc
+
+Under the hood, LangTool passes to Language Tool the spellcheck language used
+by Vim for the current file, and calls
+
+>
+  compiler langtool
+  lmake
+<
+
+Instead of lmake, you could use , if, for example, AsyncRun is installed,
+
+>
+  compiler langtool
+  AsyncRun -auto=make -program=make
+<
+
+to run Language Tool the in the background.
+
+Configuration ~
+
+Parameters, buffer-local and global, can be passed by the global variable
+g:langtool_parameters and the buffer-local variable b:langtool_parameters.
+By default
+>
+  let g:langtool_parameters = ''
+<
+and
+>
+  let b:langtool_parameters = '--autoDetect'
+<
+
+For example, (categories of) rules can be enabled and disabled by
+>
+  let s:enablecategories = 'CREATIVE_WRITING,WIKIPEDIA' .
+  let s:enable = 'PASSIVE_VOICE,TIRED_INTENSIFIERS'
+  let s:disable = 'REPEATED_WORDS,REPEATED_WORDS_3X'
+
+  let g:langtool_parameters =
+        \ '--enablecategories ' . s:enablecategories . ' ' .
+        \ '--enable ' . s:enable . ' ' .
+        \ '--disable ' . s:disable
+<
+to your vimrc.
+To set the language that LanguageTool will use to that used by Vim to
+spellcheck, enter
+>
+    let b:langtool_parameters = '--lang' . &l:spelllang
+<
+in the command line.
+
+Related Plug-ins ~
+
+This Vim plug-in is simpler than vim-LanguageTool and vim-grammarous. In
+particular, it lets Vim parse the LanguageTool output to stdout via an
+appropriate value of &errorformat; see :help errorformat. (Instead, both
+plug-ins implement their proper parser for the deprecated XML output format
+of LanguageTool.)
+
+
+vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl
