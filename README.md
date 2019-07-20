@@ -1,4 +1,4 @@
-This Vim plug-in lists all grammar mistakes found by [LanguageTool](https://languagetool.org/) in the quickfix (or local) list.
+This Vim plug-in collects all grammar mistakes (of the currently open file) found by [LanguageTool](https://languagetool.org/) into the quickfix (or local) list from which they can be jumped to.
 
 # Setup
 
@@ -15,12 +15,12 @@ where the right-hand side, `~/LanguageTool/languagetool-commandline.jar`, is the
 The command
 
 ```vim
-LangTool
+:LangTool
 ```
 
 populates the location-list with all grammar mistakes found by [LanguageTool](https://languagetool.org/);
 these can then be jumped to by the normal mode mappings `[g` and `]g` (where `g` stands for `G`rammar mistake).
-The location-list window that lists them can then be opened by `lwindow`.
+The location-list window that lists them can then be opened by `:lwindow`.
 
 To automatically open the location-list window after `LangTool`, add
 
@@ -30,25 +30,21 @@ autocmd QuickFixCmdPost lmake lwindow
 
 to your `vimrc`
 
-Under the hood, `LangTool` passes to Language Tool the spellcheck language used by Vim for the current file, and calls
+Under the hood, `LangTool` passes to `LanguageTool` the spellcheck language used by Vim for the current file, and calls
 
 ```vim
 compiler langtool
 lmake
 ```
 
-Instead of `lmake`, you could use , if, for example, [AsyncRun](https://github.com/skywind3000/asyncrun.vim/) is installed,
+To run `LanguageTool` the in the background by Vim's job feature, instead of `lmake`,
 
-```vim
-compiler langtool
-AsyncRun -auto=make -program=make
-```
-
-to run `Language Tool` the in the background.
+- use `LmakeJob` with [vim-makejob](https://git.danielmoch.com/vim-makejob/about/) installed, and
+- use `AsyncRun -auto=make -program=make` with [AsyncRun](https://github.com/skywind3000/asyncrun.vim/) installed.
 
 # Configuration
 
-Parameters, buffer-local and global, can be passed by the global variable `g:langtool_parameters` and the buffer-local variable `b:langtool_parameters`.
+Command-line parameters can be passed to `LanguageTool` by the global variable `g:langtool_parameters` and the buffer-local variable `b:langtool_parameters`.
 By default
 
 ```vim
@@ -78,7 +74,7 @@ to your `vimrc`.
 To set the language that LanguageTool will use to that used by Vim to spellcheck, enter
 
 ```vim
-    let b:langtool_parameters = '--lang' . &l:spelllang
+    let b:langtool_parameters = '--language ' . &l:spelllang
 ```
 
 in the command line.
@@ -88,5 +84,5 @@ in the command line.
 This Vim plug-in is simpler than [vim-LanguageTool](https://github.com/dpelle/vim-LanguageTool) and [vim-grammarous](https://github.com/rhysd/vim-grammarous).
 In particular, it lets Vim parse the `LanguageTool` output to stdout via an appropriate value of `&errorformat`;
 see `:help errorformat`.
-(Instead, both plug-ins implement their proper parser for the deprecated `XML` output format of `LanguageTool`.)
+(Whereas both plug-ins implement their proper parser for the deprecated `XML` output format of `LanguageTool`.)
 
