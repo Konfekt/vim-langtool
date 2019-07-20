@@ -8,11 +8,11 @@ silent let s:list = split(system('java -jar ' . g:langtool_jar . ' --list'), '[[
 function! s:lang(lang) abort
   " guess language
   let lang = substitute(a:lang, '_', '-', 'g')
-  if match(s:list, '\c' . lang) >= 0
+  if match(s:list, '\c^' . lang . '$') >= 0
     return lang
   endif
   let lang = matchstr(lang, '\v^[^-]+')
-  if match(s:list, '\c' . lang) >= 0
+  if match(s:list, '\c^' . lang . '$') >= 0
     return lang
   endif
   echomsg "Language '" . lang . "' not supported by LanguageTool!"
