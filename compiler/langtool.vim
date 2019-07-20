@@ -12,6 +12,7 @@ if !(exists('g:langtool_jar') && filereadable(g:langtool_jar))
   echoerr "Please set g:langtool_jar to the path of languagetool-commandline.jar to use the LanguageTool compiler!"
   finish
 endif
+
 if !exists('g:langtool_parameters')
   let g:langtool_parameters = ''
 endif

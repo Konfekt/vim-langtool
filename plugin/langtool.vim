@@ -24,6 +24,11 @@ let s:keepcpo         = &cpo
 set cpo&vim
 " ------------------------------------------------------------------------------
 
+if !(exists('g:langtool_jar') && filereadable(g:langtool_jar))
+  echoerr "Please set g:langtool_jar to the path of languagetool-commandline.jar to use the LanguageTool compiler!"
+  finish
+endif
+
 " Grammar
 silent! nnoremap <silent><unique> ]g :<C-U>lnext<CR>
 silent! nnoremap <silent><unique> [g :<C-U>lprevious<CR>
