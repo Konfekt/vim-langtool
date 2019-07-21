@@ -28,11 +28,11 @@ let &l:errorformat =
       \ '%-G%.%# [main] DEBUG %.%#,' .
       \ '%-GUsing %.%# for file %.%#,' .
       \ '%I%\d%\+.) Line %l\, column %c\, Rule ID: %m,' .
-      \ '%+CMessage: %m,' .
-      \ '%-CSuggestion: %.%#,' .
+      \ '%-CMessage%m,' .
+      \ '%-CSuggestion%m,' .
+      \ '%-CMore info%m,' .
+      \ '%-C%\s%#^%\+%\s%#,' .
       \ '%-C%.%#,' .
-      \ '%-C%.%#,' .
-      \ '%-CMore info: %.%#,' .
       \ '%-Z\s%#,' .
       \ '%-Q,' .
       \ '%-GTime: %.%#'
