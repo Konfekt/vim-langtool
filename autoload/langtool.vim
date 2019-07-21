@@ -20,8 +20,12 @@ function! s:lang(lang) abort
 endfunction
 
 function! langtool#langtool(bang) abort
-  let errorformat = &l:errorformat
-  let makeprg = &l:makeprg
+  if exists('b:current_compiler') && !empty(b:current_compiler)
+    let b:old_compiler = b:current_compiler
+  else
+    let errorformat = &l:errorformat
+    let makeprg = &l:makeprg
+  endif
 
   " use spelllang to set lang of langtool
   if &l:spell && !empty(&l:spelllang)
@@ -30,14 +34,16 @@ function! langtool#langtool(bang) abort
       let b:langtool_parameters = '--language ' . lang
     endif
   endif
+
   compiler langtool
+  exe 'lmake' . a:bang
 
-  if a:bang
-    lmake!
+  if exists('b:old_compiler')
+    exe 'silent compiler ' . b:old_compiler
+    unlet b:old_compiler
   else
-    lmake
+    unlet b:current_compiler
+    silent let &l:errorformat = errorformat
+    silent let &l:makeprg = makeprg
   endif
-
-  silent let &l:errorformat = errorformat
-  silent let &l:makeprg = makeprg
 endfunction

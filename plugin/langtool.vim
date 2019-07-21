@@ -33,7 +33,7 @@ endif
 silent! nnoremap <silent><unique> ]g :<C-U>lnext<CR>
 silent! nnoremap <silent><unique> [g :<C-U>lprevious<CR>
 
-command! -bar -bang LangTool silent call langtool#langtool(<bang>0)
+command! -bar -bang LangTool silent call langtool#langtool('<bang>')
 
 " ------------------------------------------------------------------------------
 let &cpo= s:keepcpo
