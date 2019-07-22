@@ -20,7 +20,9 @@ if !exists('b:langtool_parameters')
   let b:langtool_parameters = '--autoDetect'
 endif
 
-let &l:makeprg = 'java -jar ' . g:langtool_jar . ' ' . g:langtool_parameters . ' ' . b:langtool_parameters . ' ' . '%'
+let &l:makeprg = 
+      \ 'java -jar ' . g:langtool_jar . ' ' . g:langtool_parameters . ' ' . b:langtool_parameters . ' ' . 
+      \ (has('patch-7.4.191') ? '%:S' : shellescape(expand('%')))
 let &l:errorformat =
       \ '%-GPicked up _JAVA_OPTIONS: %.%#,' .
       \ '%-GExpected text language: %.%#,' .
