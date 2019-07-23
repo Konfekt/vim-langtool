@@ -57,17 +57,17 @@ and
 let b:langtool_parameters = '--autoDetect'
 ```
 
-For example, (categories of) rules can be enabled and disabled by
+For example, mother tongue can be set and (categories of) rules enabled and disabled by
 
 ```vim
 let s:enablecategories = 'CREATIVE_WRITING,WIKIPEDIA' .
 let s:enable = 'PASSIVE_VOICE,TIRED_INTENSIFIERS'
 let s:disable = 'REPEATED_WORDS,REPEATED_WORDS_3X'
 
-let g:langtool_parameters =
-      \ '--enablecategories ' . s:enablecategories . ' ' .
-      \ '--enable ' . s:enable . ' ' .
-      \ '--disable ' . s:disable
+let g:langtool_parameters = ' --mothertongue de' .
+      \ ' --enablecategories ' . s:enablecategories .
+      \ ' --enable ' . s:enable .
+      \ ' --disable ' . s:disable
 ```
 
 to your `vimrc`.
