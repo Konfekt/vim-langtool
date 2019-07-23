@@ -21,6 +21,7 @@ if !exists('b:langtool_parameters')
 endif
 
 let &l:makeprg = 
+      \ (has('win32') ? 'set "LC_ALL=en_US.utf-8" &&' : 'env LC_ALL=en_US.utf-8') . ' ' .
       \ 'java -jar ' . g:langtool_jar . ' ' . g:langtool_parameters . ' ' . b:langtool_parameters . ' ' . 
       \ (has('patch-7.4.191') ? '%:S' : shellescape(expand('%')))
 let &l:errorformat =
