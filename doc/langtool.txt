@@ -41,12 +41,17 @@ by Vim for the current file, and calls
   compiler langtool
   lmake
 <
-
 To run LanguageTool the in the background by Vim's job feature, instead of
-'lmake', use
+:lmake, it will use a custom :Make command such as that of vim-dispatch or
 
-- 'LmakeJob' with vim-makejob installed, and
-- 'AsyncRun -auto=make -program=make' with AsyncRun installed.
+command! -bang -nargs=* -complete=file -bar
+  \ Make
+  \ AsyncRun<bang> -auto=make -program=make
+
+
+with AsyncRun installed. Add let g:asyncrun_trim = 1 to your vimrc to avoid
+empty lines in the quickfix list! Other options such as g:asyncrun_save
+might be of interest.
 
 Configuration ~
 

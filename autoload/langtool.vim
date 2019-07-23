@@ -36,7 +36,11 @@ function! langtool#langtool(bang) abort
   endif
 
   compiler langtool
-  exe 'lmake' . a:bang
+  if exists(':Make')
+    exe 'silent Make' . a:bang
+  else
+    exe 'silent lmake' . a:bang
+  endif
 
   if exists('b:old_compiler')
     exe 'silent compiler ' . b:old_compiler

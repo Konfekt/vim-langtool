@@ -37,10 +37,15 @@ compiler langtool
 lmake
 ```
 
-To run `LanguageTool` the in the background by Vim's job feature, instead of `lmake`,
+To run `LanguageTool` the in the background by Vim's job feature, instead of `:lmake`, it will use a custom `:Make` command such as that of [vim-dispatch](https://github.com/tpope/vim-dispatch) or
 
-- use `LmakeJob` with [vim-makejob](https://git.danielmoch.com/vim-makejob/about/) installed, and
-- use `AsyncRun -auto=make -program=make` with [AsyncRun](https://github.com/skywind3000/asyncrun.vim/) installed.
+```vim
+command! -bang -nargs=* -complete=file -bar Make AsyncRun<bang> -auto=make -program=make
+```
+
+with [AsyncRun](https://github.com/skywind3000/asyncrun.vim/) installed.
+Add `let g:asyncrun_trim = 1` to your `vimrc` to avoid empty lines in the location list.
+Other [options](https://github.com/skywind3000/asyncrun.vim/wiki/Options), such as `g:asyncrun_save` might be of interest.
 
 # Configuration
 
