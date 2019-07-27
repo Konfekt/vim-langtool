@@ -22,30 +22,24 @@ populates the location-list with all grammar mistakes found by [LanguageTool](ht
 these can then be jumped to by the normal mode mappings `[g` and `]g` (where `g` stands for `G`rammar mistake).
 The location-list window that lists them can then be opened by `:lwindow`.
 
+To run `LanguageTool` the in the background by Vim's job feature, instead of `:lmake`, it will use a custom `:Make` command such as
+
+- that of [vim-dispatch](https://github.com/tpope/vim-dispatch) or
+- with [AsyncRun](https://github.com/skywind3000/asyncrun.vim/) installed (see also [Hints](#hints) below),
+
+    ```vim
+    command! -bang -nargs=* -complete=file -bar Make AsyncRun<bang> -auto=make -program=make
+    ```
+
+The quickfix-window that lists them can then be opened by `:cwindow`.
+
 To automatically open the location-list window after `LangTool`, add
+`autocmd QuickFixCmdPost lmake lwindow` to your `vimrc`, respectively `autocmd QuickFixCmdPost make cwindow` if you use one of those plug-ins.
+To automatically run `LangTool` after saving the modifications to a text, mail or markdown file, add to your `vimrc`:
 
 ```vim
-autocmd QuickFixCmdPost lmake lwindow
+    autocmd FileType text,mail,markdown autocmd BufWrite <buffer=abuf> LangTool
 ```
-
-to your `vimrc`
-
-Under the hood, `LangTool` passes to `LanguageTool` the spellcheck language used by Vim for the current file, and calls
-
-```vim
-compiler langtool
-lmake
-```
-
-To run `LanguageTool` the in the background by Vim's job feature, instead of `:lmake`, it will use a custom `:Make` command such as that of [vim-dispatch](https://github.com/tpope/vim-dispatch) or
-
-```vim
-command! -bang -nargs=* -complete=file -bar Make AsyncRun<bang> -auto=make -program=make
-```
-
-with [AsyncRun](https://github.com/skywind3000/asyncrun.vim/) installed.
-Add `let g:asyncrun_trim = 1` to your `vimrc` to avoid empty lines in the location list.
-Other [options](https://github.com/skywind3000/asyncrun.vim/wiki/Options), such as `g:asyncrun_save` might be of interest.
 
 # Configuration
 
@@ -83,6 +77,11 @@ To set the language that LanguageTool will use to that used by Vim to spellcheck
 ```
 
 in the command line.
+
+# Hints
+
+If you use [AsyncRun](https://github.com/skywind3000/asyncrun.vim/), add `let g:asyncrun_trim = 1` to your `vimrc` to avoid empty lines in the quickfix list.
+Other [options](https://github.com/skywind3000/asyncrun.vim/wiki/Options), such as `g:asyncrun_save` might be of interest.
 
 # Related Plug-ins
 

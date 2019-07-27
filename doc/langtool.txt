@@ -28,30 +28,27 @@ populates the location-list with all grammar mistakes found by LanguageTool.
 The location-list window that lists them can then be opened by :lwindow;
 these can then be jumped to by the normal mode mappings [g and ]g (where
 g stands for Grammar mistake).
+The location-list window that lists them can then be opened by :lwindow.
 
-To automatically open the location-list window after LangTool, add
->
-  autocmd QuickFixCmdPost lmake lwindow
-<
-to your vimrc
-
-Under the hood, LangTool passes to LanguageTool the spellcheck language used
-by Vim for the current file, and calls
->
-  compiler langtool
-  lmake
-<
 To run LanguageTool the in the background by Vim's job feature, instead of
-:lmake, it will use a custom :Make command such as that of vim-dispatch or
+:lmake, it will use a custom :Make command such as
 
-command! -bang -nargs=* -complete=file -bar
-  \ Make
-  \ AsyncRun<bang> -auto=make -program=make
+- that of vim-dispatch or
+- with AsyncRun installed (see also the section Hints below),
+>
+  command! -bang -nargs=* -complete=file -bar Make AsyncRun<bang> -auto=make -program=make
+<
 
+The quickfix-window that lists them can then be opened by :cwindow.
 
-with AsyncRun installed. Add let g:asyncrun_trim = 1 to your vimrc to avoid
-empty lines in the quickfix list! Other options such as g:asyncrun_save
-might be of interest.
+To automatically open the location-list window after LangTool, add 'autocmd
+QuickFixCmdPost lmake lwindow' to your vimrc, respectively 'autocmd
+QuickFixCmdPost make cwindow' if you use one of those plug-ins. To
+automatically run LangTool after saving the modifications to a text, mail or
+markdown file, add to your vimrc:
+>
+  autocmd FileType text,mail,markdown autocmd BufWrite <buffer=abuf> LangTool
+<
 
 Configuration ~
 
@@ -85,6 +82,13 @@ spellcheck, enter
     let b:langtool_parameters = '--language ' . &l:spelllang
 <
 in the command line.
+
+Hints ~
+
+If you use AsyncRun, add let g:asyncrun_trim = 1 to your vimrc to avoid
+empty lines in the quickfix list. The other options listed at
+https://github.com/skywind3000/asyncrun.vim/wiki/Options, such as
+g:asyncrun_save might be of interest.
 
 Related Plug-ins ~
 
