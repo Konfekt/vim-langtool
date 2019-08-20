@@ -28,8 +28,8 @@ let &l:errorformat =
       \ '%-GPicked up _JAVA_OPTIONS: %.%#,' .
       \ '%-GExpected text language: %.%#,' .
       \ '%-PWorking on %f...,' .
-      \ '%-G%.%# [main] DEBUG %.%#,' .
-      \ '%-GUsing %.%# for file %.%#,' .
+      \ '%-C%.%# [main] DEBUG %.%#,' .
+      \ '%-CUsing %.%# for file %.%#,' .
       \ '%I%\d%\+.) Line %l\, column %c\, Rule ID: %m,' .
       \ '%-CMessage%m,' .
       \ '%-CSuggestion%m,' .
