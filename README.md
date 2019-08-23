@@ -18,11 +18,11 @@ The command
 :LangTool
 ```
 
-populates the location-list with all grammar mistakes found by [LanguageTool](https://languagetool.org/);
-these can then be jumped to by the normal mode mappings `[g` and `]g` (where `g` stands for `G`rammar mistake).
-The location-list window that lists them can then be opened by `:lwindow`.
+populates the location-list with all grammar mistakes found by [LanguageTool](https://languagetool.org/).
+The (location-list) window that lists them can then be opened by `:lwindow` and they can be jumped to by `:lN` respectively `:lp`.
+(Have a look at [vim-unimpaired](https://github.com/tpope/vim-unimpaired) to use convenient mappings instead).
 
-To run `LanguageTool` the in the background by Vim's job feature, instead of `:lmake`, it will use a custom `:Make` command such as
+`LanguageTool` runs in the background by Vim's job feature, provided a custom `:Make` command such as
 
 - that of [vim-dispatch](https://github.com/tpope/vim-dispatch) or
 - with [AsyncRun](https://github.com/skywind3000/asyncrun.vim/) installed (see also [Hints](#hints) below),
@@ -31,7 +31,7 @@ To run `LanguageTool` the in the background by Vim's job feature, instead of `:l
     command! -bang -nargs=* -complete=file -bar Make AsyncRun<bang> -auto=make -program=make
     ```
 
-The quickfix-window that lists them can then be opened by `:cwindow`.
+The (quickfix) window that lists the grammar mistakes can then be opened by `:cwindow` and they can be jumped to by `:cN` respectively `:cp`.
 
 To automatically open the location-list window after `LangTool`, add
 `autocmd QuickFixCmdPost lmake lwindow` to your `vimrc`, respectively `autocmd QuickFixCmdPost make cwindow` if you use one of those plug-ins.
