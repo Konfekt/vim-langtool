@@ -29,11 +29,12 @@ The (location-list) window that lists them can then be opened by `:lwindow`
 and they can be jumped to by `:lN` respectively `:lp`. (Have a look at
 vim-unimpaired to use convenient mappings instead).
 
-To run LanguageTool the in the background by Vim's job feature, instead of
-:lmake, it will use a custom :Make command such as
+LanguageTool runs in the background by Vim's job feature, provided a custom
+:Make command exists, such as
 
-- that of vim-dispatch or
-- with AsyncRun installed (see also the section Hints below),
+- that of vim-dispatch or,
+- with AsyncRun.vim installed (see also the section Hints below), that defined
+  by
 >
   command! -bang -nargs=* -complete=file -bar Make AsyncRun<bang> -auto=make -program=make
 <
@@ -43,9 +44,9 @@ The (quickfix) window that lists the grammar mistakes can then be opened by
 
 To automatically open the location-list window after LangTool, add 'autocmd
 QuickFixCmdPost lmake lwindow' to your vimrc, respectively 'autocmd
-QuickFixCmdPost make cwindow' if you use one of those plug-ins. To
-automatically run LangTool after saving the modifications to a text, mail or
-markdown file, add to your vimrc:
+QuickFixCmdPost make cwindow' if the :Make command exists. To automatically
+run LangTool after saving the modifications to a text, mail or markdown file,
+add to your vimrc:
 >
   autocmd FileType text,mail,markdown autocmd BufWrite <buffer=abuf> LangTool
 <
@@ -62,9 +63,8 @@ and
 >
   let b:langtool_parameters = '--autoDetect'
 <
-
-For example, mother tongue can be set and (categories of) rules enabled and
-disabled by
+For example, the mother tongue can be set and (categories of) rules enabled
+and disabled by adding to your vimrc
 >
   let s:enablecategories = 'CREATIVE_WRITING,WIKIPEDIA' .
   let s:enable = 'PASSIVE_VOICE,TIRED_INTENSIFIERS'
@@ -75,9 +75,8 @@ disabled by
         \ ' --enable ' . s:enable .
         \ ' --disable ' . s:disable
 <
-to your vimrc.
-To set the language that LanguageTool will use to that used by Vim to
-spellcheck, enter
+:LangTool sets the language that LanguageTool will use to that used by Vim
+to spellcheck by
 >
     let b:langtool_parameters = '--language ' . &l:spelllang
 <
@@ -85,7 +84,7 @@ in the command line.
 
 Hints ~
 
-If you use AsyncRun, add let g:asyncrun_trim = 1 to your vimrc to avoid
+If you use AsyncRun.vim, add let g:asyncrun_trim = 1 to your vimrc to avoid
 empty lines in the quickfix list. The other options listed at
 https://github.com/skywind3000/asyncrun.vim/wiki/Options, such as
 g:asyncrun_save might be of interest.

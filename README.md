@@ -22,10 +22,10 @@ populates the location-list with all grammar mistakes found by [LanguageTool](ht
 The (location-list) window that lists them can then be opened by `:lwindow` and they can be jumped to by `:lN` respectively `:lp`.
 (Have a look at [vim-unimpaired](https://github.com/tpope/vim-unimpaired) to use convenient mappings instead).
 
-`LanguageTool` runs in the background by Vim's job feature, provided a custom `:Make` command such as
+`LanguageTool` runs in the background by Vim's job feature, provided a custom `:Make` command exists, such as
 
-- that of [vim-dispatch](https://github.com/tpope/vim-dispatch) or
-- with [AsyncRun](https://github.com/skywind3000/asyncrun.vim/) installed (see also [Hints](#hints) below),
+- that of [vim-dispatch](https://github.com/tpope/vim-dispatch) or,
+- with [AsyncRun.vim](https://github.com/skywind3000/asyncrun.vim/) installed (see also [Hints](#hints) below), that defined by
 
     ```vim
     command! -bang -nargs=* -complete=file -bar Make AsyncRun<bang> -auto=make -program=make
@@ -34,7 +34,7 @@ The (location-list) window that lists them can then be opened by `:lwindow` and 
 The (quickfix) window that lists the grammar mistakes can then be opened by `:cwindow` and they can be jumped to by `:cN` respectively `:cp`.
 
 To automatically open the location-list window after `LangTool`, add
-`autocmd QuickFixCmdPost lmake lwindow` to your `vimrc`, respectively `autocmd QuickFixCmdPost make cwindow` if you use one of those plug-ins.
+`autocmd QuickFixCmdPost lmake lwindow` to your `vimrc`, respectively `autocmd QuickFixCmdPost make cwindow` if the `:Make` command exists.
 To automatically run `LangTool` after saving the modifications to a text, mail or markdown file, add to your `vimrc`:
 
 ```vim
@@ -56,7 +56,7 @@ and
 let b:langtool_parameters = '--autoDetect'
 ```
 
-For example, mother tongue can be set and (categories of) rules enabled and disabled by
+For example, the mother tongue can be set and (categories of) rules enabled and disabled by adding to your `vimrc`
 
 ```vim
 let s:enablecategories = 'CREATIVE_WRITING,WIKIPEDIA' .
@@ -69,18 +69,15 @@ let g:langtool_parameters = ' --mothertongue de' .
       \ ' --disable ' . s:disable
 ```
 
-to your `vimrc`.
-To set the language that LanguageTool will use to that used by Vim to spellcheck, enter
+`:LangTool` sets the language that LanguageTool will use to that used by Vim to spellcheck by
 
 ```vim
     let b:langtool_parameters = '--language ' . &l:spelllang
 ```
 
-in the command line.
-
 # Hints
 
-If you use [AsyncRun](https://github.com/skywind3000/asyncrun.vim/), add `let g:asyncrun_trim = 1` to your `vimrc` to avoid empty lines in the quickfix list.
+If you use [AsyncRun.vim](https://github.com/skywind3000/asyncrun.vim/), add `let g:asyncrun_trim = 1` to your `vimrc` to avoid empty lines in the quickfix list.
 Other [options](https://github.com/skywind3000/asyncrun.vim/wiki/Options), such as `g:asyncrun_save` might be of interest.
 
 # Related Plug-ins
