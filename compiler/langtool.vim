@@ -36,7 +36,7 @@ let &l:errorformat =
       \ '%-CMore info%m,' .
       \ '%-C%\s%#^%\+%\s%#,' .
       \ '%-C%.%#,' .
-      \ '%-Z\s%#,' .
+      \ '%-Z%\s%#,' .
       \ '%-Q,' .
       \ '%-GTime: %.%#'
 silent CompilerSet makeprg
