@@ -3,7 +3,16 @@ if !(exists('g:langtool_jar') && filereadable(g:langtool_jar))
   finish
 endif
 
-silent let s:list = split(system('java -jar ' . g:langtool_jar . ' --list'), '[[:space:]]')
+if exists('g:langtool_cmd')
+  let s:langtool_cmd = g:langtool_cmd
+elseif !(exists('g:langtool_jar') && filereadable(g:langtool_jar))
+  echoerr "To use the LanguageTool compiler, please set either g:langtool_cmd to the path of an executable that starts LanguageTool in command-line, or set g:langtool_jar to the path of languagetool-commandline.jar!"
+  finish
+else
+  let s:langtool_cmd = 'java -jar ' . g:langtool_jar
+endif
+
+silent let s:list = split(system(s:langtool_cmd . ' --list'), '[[:space:]]')
 
 function! s:lang(lang) abort
   " guess language

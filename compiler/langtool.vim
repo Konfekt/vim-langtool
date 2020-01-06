@@ -8,9 +8,13 @@ endif
 let s:cpo_save = &cpo
 set cpo&vim
 
-if !(exists('g:langtool_jar') && filereadable(g:langtool_jar))
-  echoerr "Please set g:langtool_jar to the path of languagetool-commandline.jar to use the LanguageTool compiler!"
+if exists('g:langtool_cmd')
+  let s:langtool_cmd = g:langtool_cmd
+elseif !(exists('g:langtool_jar') && filereadable(g:langtool_jar))
+  echoerr "To use the LanguageTool compiler, please set either g:langtool_cmd to the path of an executable that starts LanguageTool in command-line, or set g:langtool_jar to the path of languagetool-commandline.jar!"
   finish
+else
+  let s:langtool_cmd = 'java -jar ' . g:langtool_jar
 endif
 
 if !exists('g:langtool_parameters')
@@ -22,7 +26,7 @@ endif
 
 let &l:makeprg = 
       \ (has('win32') ? 'set "LC_ALL=en_US.utf-8" &&' : 'env LC_ALL=en_US.utf-8') . ' ' .
-      \ 'java -jar ' . g:langtool_jar . ' ' . g:langtool_parameters . ' ' . b:langtool_parameters . ' ' . 
+      \ s:langtool_cmd . ' ' . g:langtool_parameters . ' ' . b:langtool_parameters . ' ' . 
       \ (has('patch-7.4.191') ? '%:S' : shellescape(expand('%')))
 let &l:errorformat =
       \ '%-GPicked up _JAVA_OPTIONS: %.%#,' .
