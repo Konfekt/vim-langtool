@@ -85,5 +85,5 @@ Other [options](https://github.com/skywind3000/asyncrun.vim/wiki/Options), such 
 This Vim plug-in is simpler than [vim-LanguageTool](https://github.com/dpelle/vim-LanguageTool) and [vim-grammarous](https://github.com/rhysd/vim-grammarous).
 In particular, it lets Vim parse the `LanguageTool` output to stdout via an appropriate value of `&errorformat`;
 see `:help errorformat`.
-(Whereas both plug-ins implement their proper parser for the deprecated `XML` output format of `LanguageTool`.)
+(Whereas both cited plug-ins implement their proper parser for the deprecated `XML` output format of `LanguageTool`.)
 
