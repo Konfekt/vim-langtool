@@ -30,7 +30,7 @@ The (location-list) window that lists them can then be opened by `:lwindow` and 
 
 `LanguageTool` runs in the background by Vim's job feature, provided a custom `:Make` command exists, such as
 
-- that of [vim-dispatch](https://github.com/tpope/vim-dispatch) or,
+- that of [vim-dispatch](https://github.com/tpope/vim-dispatch) (which was found to work better on `Microsoft Windows`) or,
 - with [AsyncRun.vim](https://github.com/skywind3000/asyncrun.vim/) installed (see also [Hints](#hints) below), that defined by
 
     ```vim
