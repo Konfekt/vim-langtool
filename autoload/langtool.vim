@@ -1,8 +1,3 @@
-if !(exists('g:langtool_jar') && filereadable(g:langtool_jar))
-  echoerr "Please set g:langtool_jar to the path of languagetool-commandline.jar to use the LanguageTool compiler!"
-  finish
-endif
-
 if exists('g:langtool_cmd')
   let s:langtool_cmd = g:langtool_cmd
 elseif !(exists('g:langtool_jar') && filereadable(g:langtool_jar))
@@ -51,11 +46,7 @@ function! langtool#langtool(bang) abort
 
   compiler langtool
   if exists('g:langtool_save') && g:langtool_save == 1 | update | endif
-  if exists(':Make') == 2
-    exe 'silent Make' . a:bang
-  else
-    exe 'silent lmake' . a:bang
-  endif
+  exe 'silent ' . (exists(':Make') == 2 ? 'Make' : 'lmake') . a:bang . ' ' . shellescape(expand('%'))
 
   if exists('b:old_compiler')
     exe 'silent compiler ' . b:old_compiler

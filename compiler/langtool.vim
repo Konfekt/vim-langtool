@@ -26,8 +26,7 @@ endif
 
 let &l:makeprg = 
       \ (has('win32') ? 'set "LC_ALL=en_US.utf-8" &&' : 'env LC_ALL=en_US.utf-8') . ' ' .
-      \ s:langtool_cmd . ' ' . g:langtool_parameters . ' ' . b:langtool_parameters . ' ' . 
-      \ (has('patch-7.4.191') ? '%:S' : shellescape(expand('%')))
+      \ s:langtool_cmd . ' ' . g:langtool_parameters . ' ' . b:langtool_parameters
 let &l:errorformat =
       \ '%-GPicked up _JAVA_OPTIONS: %.%#,' .
       \ '%-GExpected text language: %.%#,' .
