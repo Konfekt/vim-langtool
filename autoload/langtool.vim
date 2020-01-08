@@ -30,7 +30,7 @@ endfunction
 
 function! langtool#langtool(bang) abort
    if !(empty(&l:buftype) && filereadable(bufname('%')))
-     echomsg "LangTool can only check files. Please save the buffer to a file before calling LangTool."
+     echoerr "This is not a file buffer. Please save the buffer to a file before calling LangTool, because it can only check files."
      return
    endif
 
@@ -50,6 +50,7 @@ function! langtool#langtool(bang) abort
   endif
 
   compiler langtool
+  if exists('g:langtool_save') && g:langtool_save == 1 | update | endif
   if exists(':Make') == 2
     exe 'silent Make' . a:bang
   else

@@ -82,9 +82,14 @@ and disabled by adding to your vimrc
 :LangTool sets the language that LanguageTool will use to that used by Vim
 to spellcheck by
 >
-    let b:langtool_parameters = '--language ' . &l:spelllang
+  let b:langtool_parameters = '--language ' . &l:spelllang
 <
 in the command line.
+
+To avoid that the file is saved before LanguageTool checks it for mistakes,
+>
+  let g:langtool_save = 0
+<
 
 Hints ~
 

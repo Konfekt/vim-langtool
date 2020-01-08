@@ -5,13 +5,13 @@ This Vim plug-in collects all grammar mistakes (of the currently open file) foun
 If you already have LanguageTool installed and start it in the command line by an executable, say `/usr/bin/langtool`, then add to your `vimrc` the line
 
 ```vim
-  let g:langtool_cmd = '/usr/bin/langtool'
+let g:langtool_cmd = '/usr/bin/langtool'
 ```
 
 Otherwise, download and unpack [LanguageTool](https://languagetool.org/download/), say into the folder `~/LanguageTool`, and add to your vimrc the line
 
 ```vim
-  let g:langtool_jar = '~/LanguageTool/languagetool-commandline.jar'
+let g:langtool_jar = '~/LanguageTool/languagetool-commandline.jar'
 ```
 
 where the right-hand side, `~/LanguageTool/languagetool-commandline.jar`, is the path of the file `languagetool-commandline.jar`.
@@ -78,7 +78,13 @@ let g:langtool_parameters = ' --mothertongue de' .
 `:LangTool` sets the language that LanguageTool will use to that used by Vim to spellcheck by
 
 ```vim
-    let b:langtool_parameters = '--language ' . &l:spelllang
+let b:langtool_parameters = '--language ' . &l:spelllang
+```
+
+To avoid that the file is saved before LanguageTool checks it for mistakes,
+
+```vim
+let g:langtool_save = 0
 ```
 
 # Hints
