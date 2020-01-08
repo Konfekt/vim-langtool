@@ -29,6 +29,11 @@ function! s:lang(lang) abort
 endfunction
 
 function! langtool#langtool(bang) abort
+   if !(empty(&l:buftype) && filereadable(bufname('%')))
+     echomsg "LangTool can only check files. Please save the buffer to a file before calling LangTool."
+     return
+   endif
+
   if exists('b:current_compiler') && !empty(b:current_compiler)
     let b:old_compiler = b:current_compiler
   else
