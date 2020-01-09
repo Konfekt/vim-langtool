@@ -24,10 +24,14 @@ function! s:lang(lang) abort
 endfunction
 
 function! langtool#langtool(bang) abort
-   if !(empty(&l:buftype) && filereadable(bufname('%')))
-     echoerr "This is not a file buffer. Please save the buffer to a file before calling LangTool, because it can only check files."
-     return
-   endif
+  if !(empty(&l:buftype) && filereadable(bufname('%')))
+    if input('This is not a file buffer. LangTool can only check files. Save to a temporary text file, y(es) or n(o)? ', 'y') =~? '^y'
+      exe 'saveas ' . tempname() . '.txt' | filetype detect
+      redraw!
+    else
+      return
+    endif
+  endif
 
   if exists('b:current_compiler') && !empty(b:current_compiler)
     let b:old_compiler = b:current_compiler
