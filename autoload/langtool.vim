@@ -42,6 +42,9 @@ function! langtool#langtool(bang) abort
     if !empty(lang)
       let b:langtool_parameters = '--language ' . lang
     endif
+  else
+    echohl WarningMsg | echomsg "Please set spellllang for more accurate check by LanguageTool. Using autodetection instead." | echohl None
+    let b:langtool_parameters = '--autoDetect'
   endif
 
   compiler langtool
