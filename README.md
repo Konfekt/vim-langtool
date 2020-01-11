@@ -30,12 +30,14 @@ The (location-list) window that lists them can then be opened by `:lwindow` and 
 
 `LanguageTool` runs in the background by Vim's job feature, provided a custom `:Make` command exists, such as
 
-- that of [vim-dispatch](https://github.com/tpope/vim-dispatch) (which was found to work better on `Microsoft Windows`) or,
-- with [AsyncRun.vim](https://github.com/skywind3000/asyncrun.vim/) installed (see also [Hints](#hints) below), that defined by
+- that of [vim-dispatch](https://github.com/tpope/vim-dispatch) or,
+- that defined by
 
     ```vim
-    command! -bang -nargs=* -complete=file -bar Make AsyncRun<bang> -auto=make -program=make
+    command! -bang -nargs=* -complete=file Make AsyncRun<bang> -auto=make -program=make
     ```
+
+  with [AsyncRun.vim](https://github.com/skywind3000/asyncrun.vim/) installed (see also [Hints](#hints) below).
 
 The (quickfix) window that lists the grammar mistakes can then be opened by `:cwindow` and they can be jumped to by `:cN` respectively `:cp`.
 
@@ -89,7 +91,8 @@ let g:langtool_save = 0
 
 # Hints
 
-If you use [AsyncRun.vim](https://github.com/skywind3000/asyncrun.vim/), add `let g:asyncrun_trim = 1` to your `vimrc` to avoid empty lines in the quickfix list.
+To avoid empty lines in the quickfix list, add `let g:asyncrun_trim = 1` to your `vimrc`.
+
 Other [options](https://github.com/skywind3000/asyncrun.vim/wiki/Options), such as `g:asyncrun_save` might be of interest.
 
 # Related Plug-ins

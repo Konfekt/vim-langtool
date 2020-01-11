@@ -36,13 +36,12 @@ vim-unimpaired to use convenient mappings instead).
 LanguageTool runs in the background by Vim's job feature, provided a custom
 :Make command exists, such as
 
-- that of vim-dispatch, which was found to work better on Microsoft Windows,
-  or
-- with AsyncRun.vim installed (see also the section Hints below), that defined
-  by
+- that of vim-dispatch, or
+- that defined by
 >
-  command! -bang -nargs=* -complete=file -bar Make AsyncRun<bang> -auto=make -program=make
+  command! -bang -nargs=* -complete=file Make AsyncRun<bang> -auto=make -program=make
 <
+  with AsyncRun.vim installed (see also the section Hints below). 
 
 The (quickfix) window that lists the grammar mistakes can then be opened by
 `:cwindow` and they can be jumped to by `:cN` respectively `:cp`.
@@ -94,8 +93,8 @@ To avoid that the file is saved before LanguageTool checks it for mistakes,
 
 Hints ~
 
-If you use AsyncRun.vim, add let g:asyncrun_trim = 1 to your vimrc to avoid
-empty lines in the quickfix list. The other options listed at
+To avoid empty lines in the quickfix list, add `let g:asyncrun_trim = 1` to
+your `vimrc`. Other options listed at
 https://github.com/skywind3000/asyncrun.vim/wiki/Options, such as
 g:asyncrun_save might be of interest.
 
