@@ -53,8 +53,7 @@ function! langtool#langtool(bang) abort
 
   compiler langtool
   if exists('g:langtool_save') && g:langtool_save == 1 | update | endif
-  exe 'silent ' . (exists(':Make') == 2 ? 'Make' : 'lmake') . a:bang . ' ' .
-        \ (v:version >= 800 ? '%:S' : shellescape(expand('%')))
+  exe 'silent ' . (exists(':Make') == 2 ? 'Make' : 'lmake') . a:bang . ' ' . shellescape(expand('%'))
 
   if exists('b:old_compiler')
     exe 'silent compiler ' . b:old_compiler
