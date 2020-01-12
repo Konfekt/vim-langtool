@@ -19,7 +19,7 @@ function! s:lang(lang) abort
   if match(s:list, '\c^' . lang . '$') >= 0
     return lang
   endif
-  echomsg "Language '" . lang . "' not supported by LanguageTool!"
+  echoerr "Language '" . lang . "' not supported by LanguageTool!"
   return ''
 endfunction
 
