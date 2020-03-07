@@ -8,13 +8,13 @@ endif
 let s:cpo_save = &cpo
 set cpo&vim
 
-if exists('g:langtool_cmd')
-  let s:langtool_cmd = g:langtool_cmd
-elseif !(exists('g:langtool_jar') && filereadable(g:langtool_jar))
+if exists('g:langtool_cmd') && !empty(exepath(fnamemodify(g:langtool_cmd, ':p')))
+  let s:langtool_cmd = shellescape(exepath(fnamemodify(g:langtool_cmd, ':p')))
+elseif exists('g:langtool_jar') && filereadable(fnamemodify(g:langtool_jar, ':p'))
+  let s:langtool_cmd = 'java -jar ' . shellescape(fnamemodify(g:langtool_jar, ':p'))
+else
   echoerr "To use the LanguageTool compiler, please set either g:langtool_cmd to the path of an executable that starts LanguageTool in command-line, or set g:langtool_jar to the path of languagetool-commandline.jar!"
   finish
-else
-  let s:langtool_cmd = 'java -jar ' . g:langtool_jar
 endif
 
 if !exists('g:langtool_parameters')
