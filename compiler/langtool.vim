@@ -21,7 +21,8 @@ if !exists('g:langtool_parameters')
   let g:langtool_parameters = ''
 endif
 if !exists('b:langtool_parameters')
-  let b:langtool_parameters = '--autoDetect'
+  let b:langtool_lang = matchstr(&l:spelllang, '^\a\a')
+  let b:langtool_parameters = empty(b:langtool_lang) ? '--autoDetect' : '--language ' . b:langtool_lang
 endif
 
 let &l:makeprg = 
