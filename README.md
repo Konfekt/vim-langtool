@@ -95,10 +95,12 @@ To avoid empty lines in the quickfix list, add `let g:asyncrun_trim = 1` to your
 
 Other [options](https://github.com/skywind3000/asyncrun.vim/wiki/Options), such as `g:asyncrun_save` might be of interest.
 
-# Related Plug-ins
+# Comparison to Alternative Plug-ins
 
 This Vim plug-in is simpler than [vim-LanguageTool](https://github.com/dpelle/vim-LanguageTool) and [vim-grammarous](https://github.com/rhysd/vim-grammarous).
-In particular, it lets Vim parse the `LanguageTool` output to stdout via an appropriate value of `&errorformat`;
+In particular, it lets Vim parse the `LanguageTool` output to `stdout` via an appropriate value of `&errorformat`;
 see `:help errorformat`.
 (Whereas both cited plug-ins implement their proper parser for the deprecated `XML` output format of `LanguageTool`.)
+
+<!-- A convenience for the user of this Vim plug-in (that its alternatives lack) is the (optional) use of Vim's job feature to that leaves Vim responsive while `LanguageTool` checks the text file in the background, which can take a while. -->
 
