@@ -30,7 +30,7 @@ The command
 <
 populates the location-list with all grammar mistakes found by LanguageTool.
 The (location-list) window that lists them can then be opened by `:lwindow`
-and they can be jumped to by `:lN` respectively `:lp`. (Have a look at
+and they can be jumped to by `:ln` respectively `:lp`. (Have a look at
 vim-unimpaired to use convenient mappings instead).
 
 LanguageTool runs in the background by Vim's job feature, provided a custom
@@ -44,7 +44,7 @@ LanguageTool runs in the background by Vim's job feature, provided a custom
   with AsyncRun.vim installed (see also the section Hints below). 
 
 The (quickfix) window that lists the grammar mistakes can then be opened by
-`:cwindow` and they can be jumped to by `:cN` respectively `:cp`.
+`:cwindow` and they can be jumped to by `:cn` respectively `:cp`.
 
 To automatically open the location-list window after LangTool, add 'autocmd
 QuickFixCmdPost lmake lwindow' to your vimrc, respectively 'autocmd

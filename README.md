@@ -25,8 +25,8 @@ The command
 ```
 
 populates the location-list with all grammar mistakes found by [LanguageTool](https://languagetool.org/).
-The (location-list) window that lists them can then be opened by `:lwindow` and they can be jumped to by `:lN` respectively `:lp`.
-(Have a look at [vim-unimpaired](https://github.com/tpope/vim-unimpaired) to use convenient mappings instead).
+The location-list window that lists all compiler messages can then be opened by `:lwindow`;
+their locations can be jumped to by `:ln` respectively `:lp` (or use [vim-unimpaired](https://github.com/tpope/vim-unimpaired)'s mappings `]l` and `[l`.)
 
 `LanguageTool` runs in the background by Vim's job feature, provided a custom `:Make` command exists, such as
 
@@ -39,7 +39,8 @@ The (location-list) window that lists them can then be opened by `:lwindow` and 
 
   with [AsyncRun.vim](https://github.com/skywind3000/asyncrun.vim/) installed (see also [Hints](#hints) below).
 
-The (quickfix) window that lists the grammar mistakes can then be opened by `:cwindow` and they can be jumped to by `:cN` respectively `:cp`.
+The (quickfix) window that lists all compiler messages can then be opened by `:cwindow`;
+their locations can be jumped to by `:cn` respectively `:cp` (or use [vim-unimpaired](https://github.com/tpope/vim-unimpaired)'s mappings `]q` and `[q`.).
 
 To automatically open the location-list window after `LangTool`, add
 `autocmd QuickFixCmdPost lmake lwindow` to your `vimrc`, respectively `autocmd QuickFixCmdPost make cwindow` if the `:Make` command exists.
