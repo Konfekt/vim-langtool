@@ -39,7 +39,7 @@ LanguageTool runs in the background by Vim's job feature, provided a custom
 - that of vim-dispatch, or
 - that defined by
 >
-  command! -bang -nargs=* -complete=file Make AsyncRun<bang> -auto=make -program=make
+  command! -bang -nargs=* -complete=file Make AsyncRun<bang> -auto=make -program=make -strip <args>
 <
   with AsyncRun.vim installed (see also the section Hints below). 
 

@@ -34,7 +34,7 @@ their locations can be jumped to by `:ln` respectively `:lp` (or use [vim-unimpa
 - that defined by
 
     ```vim
-    command! -bang -nargs=* -complete=file Make AsyncRun<bang> -auto=make -program=make
+    command! -bang -nargs=* -complete=file Make AsyncRun<bang> -auto=make -program=make -strip <args>
     ```
 
   with [AsyncRun.vim](https://github.com/skywind3000/asyncrun.vim/) installed (see also [Hints](#hints) below).
