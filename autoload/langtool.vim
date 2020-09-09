@@ -41,7 +41,7 @@ function! langtool#langtool(bang) abort
   endif
 
   " use spelllang to set lang of langtool
-  if &l:spell && !empty(&l:spelllang)
+  if !empty(&l:spelllang)
     let lang = s:lang(&l:spelllang)
     if !empty(lang)
       let b:langtool_parameters = '--language ' . lang
