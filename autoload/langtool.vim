@@ -16,11 +16,10 @@ function! s:lang(lang) abort
     return lang
   endif
   let lang = matchstr(lang, '\v^[^-]+')
-  if match(s:list, '\c^' . lang . '$') >= 0
-    return lang
+  if match(s:list, '\c^' . lang . '$') == -1
+    echomsg "Language '" . lang . "' apparently not supported by LanguageTool; trying anyway!"
   endif
-  echoerr "Language '" . lang . "' not supported by LanguageTool!"
-  return ''
+  return lang
 endfunction
 
 function! langtool#langtool(bang) abort
