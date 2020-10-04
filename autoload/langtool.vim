@@ -17,7 +17,7 @@ function! s:lang(lang) abort
   endif
   let lang = matchstr(lang, '\v^[^-]+')
   if match(s:list, '\c^' . lang . '$') == -1
-    echomsg "Language '" . lang . "' apparently not supported by LanguageTool; trying anyway!"
+    echoerr "Language '" . lang . "' not listed in output of " . s:langtool_cmd . " --list; trying anyway!"
   endif
   return lang
 endfunction
