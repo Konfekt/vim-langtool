@@ -21,8 +21,28 @@ if !exists('g:langtool_parameters')
   let g:langtool_parameters = ''
 endif
 if !exists('b:langtool_parameters')
-  let b:langtool_lang = matchstr(&l:spelllang, '^\a\a')
-  let b:langtool_parameters = empty(b:langtool_lang) ? '--autoDetect' : '--language ' . b:langtool_lang
+  let b:langtool_parameters = ''
+endif
+if match(b:langtool_parameters, '\v\c%(\s|^)%(--language|-l)\s+%(\a+-)*\a+%(\s|$)') == -1
+  if !exists('s:list')
+    silent let s:list = split(system(s:langtool_cmd . ' --list'), '[[:space:]]')
+  endif
+  " guess language
+  let b:langtool_lang = substitute(&spelllang, '_', '-', 'g')
+  if match(s:list, '\c^' . b:langtool_lang . '$') == -1
+    let b:langtool_lang = matchstr(b:langtool_lang, '\v^[^-]+')
+    if match(s:list, '\c^' . b:langtool_lang . '$') == -1
+      echoerr "Language '" . b:langtool_lang . "' not listed in output of " . s:langtool_cmd . " --list; trying anyway!"
+    endif
+  endif
+  if !empty(b:langtool_lang)
+    let b:langtool_parameters .= ' --language ' . b:langtool_lang
+  else
+    echohl WarningMsg | echomsg "Please set &spellllang for more accurate check by LanguageTool; using autodetection instead." | echohl None
+    if match(b:langtool_parameters, '\v\c%(\s|^)%(--autodetect|-adl)%(\s|$)') == -1
+      let b:langtool_parameters .= ' --autoDetect'
+    endif
+  endif
 endif
 
 let &l:makeprg = 
