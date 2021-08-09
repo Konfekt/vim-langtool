@@ -13,7 +13,7 @@ if exists('g:langtool_cmd') && !empty(exepath(fnamemodify(g:langtool_cmd, ':p'))
 elseif exists('g:langtool_jar') && filereadable(fnamemodify(g:langtool_jar, ':p'))
   let s:langtool_cmd = 'java -jar ' . shellescape(fnamemodify(g:langtool_jar, ':p'))
 else
-  echoerr "To use the LanguageTool compiler, please set either g:langtool_cmd to the path of an executable that starts LanguageTool in command-line, or set g:langtool_jar to the path of languagetool-commandline.jar!"
+  echoerr 'To use the LanguageTool compiler, please set either g:langtool_cmd to the path of an executable that starts LanguageTool in command-line, or set g:langtool_jar to the path of languagetool-commandline.jar!'
   finish
 endif
 
@@ -21,7 +21,7 @@ if !exists('g:langtool_parameters')
   let g:langtool_parameters = ''
 endif
 if !exists('b:langtool_parameters')
-  let b:langtool_parameters = ''
+  let b:langtool_parameters = g:langtool_parameters
 endif
 if match(b:langtool_parameters, '\v\c%(\s|^)%(--language|-l)\s+%(\a+-)*\a+%(\s|$)') == -1
   if !exists('s:list')
@@ -38,7 +38,7 @@ if match(b:langtool_parameters, '\v\c%(\s|^)%(--language|-l)\s+%(\a+-)*\a+%(\s|$
   if !empty(b:langtool_lang)
     let b:langtool_parameters .= ' --language ' . b:langtool_lang
   else
-    echohl WarningMsg | echomsg "Please set &spellllang for more accurate check by LanguageTool; using autodetection instead." | echohl None
+    echohl WarningMsg | echomsg 'Please set &spellllang for more accurate check by LanguageTool; using autodetection instead.' | echohl None
     if match(b:langtool_parameters, '\v\c%(\s|^)%(--autodetect|-adl)%(\s|$)') == -1
       let b:langtool_parameters .= ' --autoDetect'
     endif
@@ -46,7 +46,7 @@ if match(b:langtool_parameters, '\v\c%(\s|^)%(--language|-l)\s+%(\a+-)*\a+%(\s|$
 endif
 
 let &l:makeprg = 
-      \ s:langtool_cmd . ' ' . g:langtool_parameters . ' ' . b:langtool_parameters
+      \ s:langtool_cmd . ' ' . b:langtool_parameters
 let &l:errorformat =
       \ '%-GPicked up _JAVA_OPTIONS: %.%#,' .
       \ '%-GExpected text language: %.%#,' .
