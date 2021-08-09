@@ -28,7 +28,14 @@ if match(b:langtool_parameters, '\v\c%(\s|^)%(--language|-l)\s+%(\a+-)*\a+%(\s|$
     silent let s:list = split(system(s:langtool_cmd . ' --list'), '[[:space:]]')
   endif
   " guess language
-  let b:langtool_lang = substitute(&spelllang, '_', '-', 'g')
+  let spelllangs = split(&spelllang, ',')
+  if len(spelllangs) > 1
+    echohl WarningMsg | echo 'Please select one of the &spelllang language codes numbered 0,1,...' | echohl None
+    let spelllang = spelllangs[inputlist(spelllangs)]
+  else
+    let spelllang = &spelllang
+  endif
+  let b:langtool_lang = substitute(spelllang, '_', '-', 'g')
   if match(s:list, '\c^' . b:langtool_lang . '$') == -1
     let b:langtool_lang = matchstr(b:langtool_lang, '\v^[^-]+')
     if match(s:list, '\c^' . b:langtool_lang . '$') == -1
