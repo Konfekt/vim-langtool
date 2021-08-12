@@ -28,9 +28,10 @@ populates the location-list with all grammar mistakes found by [LanguageTool](ht
 The location-list window that lists all compiler messages can then be opened by `:lwindow`;
 their locations can be jumped to by `:ln` respectively `:lp` (or use [vim-unimpaired](https://github.com/tpope/vim-unimpaired)'s mappings `]l` and `[l`.)
 
-`LanguageTool` runs in the background by Vim's job feature, provided a custom `:Make` command exists, such as
+`LanguageTool` runs in the background by Vim's job feature, provided an `:(L)Make` command exists, such as
 
-- that of [vim-dispatch](https://github.com/tpope/vim-dispatch) or,
+- that of [tasks.vim](https://github.com/mg979/tasks.vim), or
+- that of [vim-dispatch](https://github.com/tpope/vim-dispatch), or
 - that defined by
 
     ```vim

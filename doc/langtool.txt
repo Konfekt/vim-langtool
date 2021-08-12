@@ -36,6 +36,7 @@ vim-unimpaired to use convenient mappings instead).
 LanguageTool runs in the background by Vim's job feature, provided a custom
 :Make command exists, such as
 
+- that of tasks.vim], or
 - that of vim-dispatch, or
 - that defined by
 >

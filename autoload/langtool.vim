@@ -32,7 +32,9 @@ function! langtool#langtool(bang) abort
   try
     compiler langtool
     if exists('g:langtool_save') && g:langtool_save == 1 | update | endif
-    exe 'silent ' . (exists(':Make') == 2 ? 'Make' : 'lmake') . a:bang . ' ' . shellescape(expand('%'))
+    exe 'silent ' . (exists(':LMake') == 2 ? 'LMake' :
+          \ exists(':Make') == 2 ? 'Make'
+          \ : 'lmake') . a:bang . ' ' . shellescape(expand('%'))
   finally
     if exists('old_langtool_parameters')
       let b:langtool_parameters = old_langtool_parameters
