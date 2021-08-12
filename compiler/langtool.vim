@@ -28,27 +28,27 @@ if match(b:langtool_parameters, '\v\c%(\s|^)%(--language|-l)\s+%(\a+-)*\a+%(\s|$
     silent let s:list = split(system(s:langtool_cmd . ' --list'), '[[:space:]]')
   endif
   " guess language
-  let spelllangs = split(&spelllang, ',')
+  let spelllangs = split(&l:spelllang, ',')
   if len(spelllangs) > 1
     echohl WarningMsg | echo 'Please select one of the &spelllang language codes numbered 0,1,...' | echohl None
-    let spelllang = spelllangs[inputlist(spelllangs)]
+    let spelllang = get(spelllangs, inputlist(spelllangs), '')
   else
-    let spelllang = &spelllang
+    let spelllang = &l:spelllang
   endif
   let b:langtool_lang = substitute(spelllang, '_', '-', 'g')
-  if match(s:list, '\c^' . b:langtool_lang . '$') == -1
-    let b:langtool_lang = matchstr(b:langtool_lang, '\v^[^-]+')
-    if match(s:list, '\c^' . b:langtool_lang . '$') == -1
-      echoerr "Language '" . b:langtool_lang . "' not listed in output of " . s:langtool_cmd . " --list; trying anyway!"
-    endif
-  endif
-  if !empty(b:langtool_lang)
-    let b:langtool_parameters .= ' --language ' . b:langtool_lang
-  else
+  if empty(b:langtool_lang)
     echohl WarningMsg | echomsg 'Please set &spellllang for more accurate check by LanguageTool; using autodetection instead.' | echohl None
     if match(b:langtool_parameters, '\v\c%(\s|^)%(--autodetect|-adl)%(\s|$)') == -1
       let b:langtool_parameters .= ' --autoDetect'
     endif
+  else
+    if match(s:list, '\c^' . b:langtool_lang . '$') == -1
+      let b:langtool_lang = matchstr(b:langtool_lang, '\v^[^-]+')
+      if match(s:list, '\c^' . b:langtool_lang . '$') == -1
+        echoerr "Language '" . b:langtool_lang . "' not listed in output of " . s:langtool_cmd . " --list; trying anyway!"
+      endif
+    endif
+    let b:langtool_parameters .= ' --language ' . b:langtool_lang
   endif
 endif
 
