@@ -1,5 +1,5 @@
-if exists('g:langtool_cmd') && !empty(exepath(fnamemodify(g:langtool_cmd, ':p')))
-  let s:langtool_cmd = shellescape(exepath(fnamemodify(g:langtool_cmd, ':p')))
+if exists('g:langtool_cmd') && !empty(exepath(g:langtool_cmd))
+  let s:langtool_cmd = shellescape(exepath(g:langtool_cmd))
 elseif exists('g:langtool_jar') && filereadable(fnamemodify(g:langtool_jar, ':p'))
   let s:langtool_cmd = 'java -jar ' . shellescape(fnamemodify(g:langtool_jar, ':p'))
 else
