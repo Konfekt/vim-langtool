@@ -24,9 +24,6 @@ if !exists('b:langtool_parameters')
   let b:langtool_parameters = g:langtool_parameters
 endif
 if match(b:langtool_parameters, '\v\c%(\s|^)%(--language|-l)\s+%(\a+-)*\a+%(\s|$)') == -1
-  if !exists('s:list')
-    silent let s:list = split(system(s:langtool_cmd . ' --list'), '[[:space:]]')
-  endif
   " guess language
   let spelllangs = split(&l:spelllang, ',')
   if len(spelllangs) > 1
@@ -42,6 +39,9 @@ if match(b:langtool_parameters, '\v\c%(\s|^)%(--language|-l)\s+%(\a+-)*\a+%(\s|$
       let b:langtool_parameters .= ' --autoDetect'
     endif
   else
+    if !exists('s:list')
+      silent let s:list = split(system(s:langtool_cmd . ' --list'), '[[:space:]]')
+    endif
     if match(s:list, '\c^' . b:langtool_lang . '$') == -1
       let b:langtool_lang = matchstr(b:langtool_lang, '\v^[^-]+')
       if match(s:list, '\c^' . b:langtool_lang . '$') == -1
