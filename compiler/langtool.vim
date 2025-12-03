@@ -1,12 +1,13 @@
 if exists("current_compiler") | finish | endif
 let current_compiler = "langtool"
 
-if exists(":CompilerSet") != 2		" older Vim always used :setlocal
-  command -nargs=* CompilerSet setlocal <args>
-endif
-
 let s:cpo_save = &cpo
 set cpo&vim
+
+if !executable('java')
+  echoerr 'To use the LanguageTool compiler, Java must be installed and available in your PATH!'
+  finish
+endif
 
 " if exists('g:langtool_cmd') && !empty(exepath(g:langtool_cmd))
 "   let s:langtool_cmd = shellescape(exepath(g:langtool_cmd))
