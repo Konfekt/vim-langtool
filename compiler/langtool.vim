@@ -20,8 +20,10 @@ if match(s:parameters, langtool#language_pattern()) == -1
   " guess language from 'spelllang' (skipping 'cjk', which names no language)
   let s:spelllangs = filter(split(&l:spelllang, ','), 'v:val !=? "cjk"')
   if len(s:spelllangs) > 1
-    echohl WarningMsg | echo 'Please select one of the &spelllang language codes numbered 0,1,...' | echohl None
-    let s:spelllang = get(s:spelllangs, inputlist(map(copy(s:spelllangs), 'v:key . ". " . v:val')), '')
+    " Cancelling (0) or an invalid choice leaves the language empty (autodetection).
+    let s:choice = inputlist(['Select the language for LanguageTool:'] + map(copy(s:spelllangs), '(v:key + 1) . ". " . v:val'))
+    let s:spelllang = s:choice >= 1 ? get(s:spelllangs, s:choice - 1, '') : ''
+    unlet s:choice
   else
     let s:spelllang = get(s:spelllangs, 0, '')
   endif

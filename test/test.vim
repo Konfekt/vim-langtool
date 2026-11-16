@@ -199,9 +199,63 @@ endfunction
 function! s:TestSelectLanguage() abort
   call s:Reset('select.txt')
   setlocal spelllang=en,de
-  call feedkeys("1\<CR>", 'nt')
+  call feedkeys("2\<CR>", 'nt')
   call s:LangTool()
   call s:Check('select language', s:Args() =~# '^--language de ', 1)
+  call feedkeys("1\<CR>", 'nt')
+  call s:LangTool()
+  call s:Check('select language: first', s:Args() =~# '^--language en ', 1)
+endfunction
+
+" Cancelling the language selection falls back to autodetection rather than
+" picking the first language.
+function! s:TestSelectLanguageCancel() abort
+  call s:Reset('cancel.txt')
+  setlocal spelllang=en,de
+  call feedkeys("\<CR>", 'nt')
+  call s:LangTool()
+  call feedkeys('', 'x')
+  call s:Check('select cancelled: autodetect', s:Args() =~# '^ \=--autoDetect ', 1)
+endfunction
+
+" A g:langtool_cmd that is not executable is named in the error.
+function! s:TestCmdNotExecutable() abort
+  call s:Reset('notexec.txt')
+  let g:langtool_cmd = s:tmp . '/no-such-langtool'
+  call s:Check('cmd not executable: error', s:LangTool() =~# 'g:langtool_cmd (.*no-such-langtool.) must be an executable', 1)
+  call s:Check('cmd not executable: not run', filereadable(s:log), 0)
+endfunction
+
+" A new file buffer that is not yet on disk is written under its own name,
+" not renamed to a temporary file.
+function! s:TestNewFile() abort
+  call s:Reset('placeholder.txt')
+  let file = s:tmp . '/new.txt'
+  execute 'edit' fnameescape(file)
+  call setline(1, 'This is a example sentence.')
+  call s:Check('new file: no error', s:LangTool(), '')
+  call s:Check('new file: written', [expand('%:p'), filereadable(file)], [file, 1])
+  call s:Check('new file: args', s:Args(), '--language en ' . file)
+endfunction
+
+" A 'nofile' buffer, which cannot be saved, is checked as a temporary copy.
+function! s:TestNofileBuffer() abort
+  call s:Reset('placeholder.txt')
+  enew
+  setlocal buftype=nofile
+  call setline(1, 'This is a example sentence.')
+  call feedkeys("y\<CR>", 'nt')
+  call s:Check('nofile: no error', s:LangTool(), '')
+  call s:Check('nofile: copy', [&l:buftype, filereadable(expand('%')), getline(1)], ['', 1, 'This is a example sentence.'])
+  call s:Check('nofile: list', s:Texts(), s:want_texts)
+endfunction
+
+" A --language in g:langtool_parameters is kept when b:langtool_parameters is unset.
+function! s:TestGlobalLanguageKept() abort
+  call s:Reset('global.txt')
+  let g:langtool_parameters = '--language fr'
+  call s:LangTool()
+  call s:Check('global language kept', split(s:Args()), ['--language', 'fr', s:tmp . '/global.txt'])
 endfunction
 
 " Every --language option is replaced by the one from 'spelllang'.
@@ -262,7 +316,8 @@ endfunction
 
 let s:tests = ['Unconfigured', 'Cmd', 'Jar', 'JarWithoutJava', 'NoGlobals', 'ParametersUntouched',
       \ 'AutoDetectNotSticky', 'SpelllangWarning', 'UnlistedLanguage', 'LanguageFallback', 'Cjk',
-      \ 'SelectLanguage', 'SeveralLanguageOptions', 'SpecialFileName', 'RestoreCompiler', 'CompilerBang']
+      \ 'SelectLanguage', 'SelectLanguageCancel', 'CmdNotExecutable', 'NewFile', 'NofileBuffer', 'GlobalLanguageKept',
+      \ 'SeveralLanguageOptions', 'SpecialFileName', 'RestoreCompiler', 'CompilerBang']
 if !empty($LANGTOOL_JAR)
   call add(s:tests, 'RealLanguageTool')
 endif

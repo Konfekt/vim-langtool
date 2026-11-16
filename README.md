@@ -27,6 +27,7 @@ The command
 ```
 
 populates the location-list with all grammar mistakes found by [LanguageTool](https://languagetool.org/).
+A new file that is not yet on disk is written first (unless `g:langtool_save` is `0`); a buffer that is not a file, such as a scratch buffer, can be checked as a temporary copy.
 The location-list window that lists all compiler messages can then be opened by `:lwindow`;
 their locations can be jumped to by `:ln` respectively `:lp` (or use [vim-unimpaired](https://github.com/tpope/vim-unimpaired)'s mappings `]l` and `[l`.)
 
@@ -75,8 +76,8 @@ let g:langtool_parameters = ' --mothertongue de' .
       \ ' --disable ' . s:disable
 ```
 
-`:LangTool` sets the language that LanguageTool will use to that used by Vim to spellcheck, that is, it passes `--language ` followed by `&l:spelllang` (in place of any `--language` in `b:langtool_parameters`).
-If `&l:spelllang` lists several languages, then it asks which one to use (skipping `cjk`); if it is empty, then it passes `--autoDetect` instead.
+`:LangTool` sets the language that LanguageTool will use to that used by Vim to spellcheck, that is, it passes `--language ` followed by `&l:spelllang` (in place of any `--language` in `b:langtool_parameters`; a `--language` in `g:langtool_parameters` is kept unless `b:langtool_parameters` is set).
+If `&l:spelllang` lists several languages, then it asks which one to use (skipping `cjk`); if it is empty or the choice is cancelled, then it passes `--autoDetect` instead.
 
 To avoid that the file is saved before LanguageTool checks it for mistakes,
 
