@@ -1,61 +1,60 @@
-if exists("current_compiler") | finish | endif
-let current_compiler = "langtool"
+if exists('current_compiler') | finish | endif
+let current_compiler = 'langtool'
 
 let s:cpo_save = &cpo
 set cpo&vim
 
-if !executable('java')
-  echoerr 'To use the LanguageTool compiler, Java must be installed and available in your PATH!'
-  finish
-endif
-
-" if exists('g:langtool_cmd') && !empty(exepath(g:langtool_cmd))
-"   let s:langtool_cmd = shellescape(exepath(g:langtool_cmd))
-if exists('g:langtool_jar') && filereadable(fnamemodify(g:langtool_jar, ':p'))
-  let s:langtool_cmd = 'java -Dfile.encoding=' . &encoding . ' -jar ' . shellescape(fnamemodify(g:langtool_jar, ':p'))
-else
-  echoerr 'To use the LanguageTool compiler, please set either g:langtool_cmd to the path of an executable that starts LanguageTool in command-line, or set g:langtool_jar to the path of languagetool-commandline.jar!'
+let s:langtool_cmd = langtool#cmd()
+if empty(s:langtool_cmd)
+  echoerr langtool#cmd_error()
+  let &cpo = s:cpo_save
+  unlet s:cpo_save
   finish
 endif
 
 if !exists('g:langtool_parameters')
   let g:langtool_parameters = ''
 endif
-if !exists('b:langtool_parameters')
-  let b:langtool_parameters = g:langtool_parameters
-endif
-if match(b:langtool_parameters, '\v\c%(\s|^)%(--language|-l)\s+%(\a+-)*\a+%(\s|$)') == -1
-  " guess language
-  let spelllangs = split(&l:spelllang, ',')
-  if len(spelllangs) > 1
+let s:parameters = get(b:, 'langtool_parameters', g:langtool_parameters)
+if match(s:parameters, langtool#language_pattern()) == -1
+  " guess language from 'spelllang' (skipping 'cjk', which names no language)
+  let s:spelllangs = filter(split(&l:spelllang, ','), 'v:val !=? "cjk"')
+  if len(s:spelllangs) > 1
     echohl WarningMsg | echo 'Please select one of the &spelllang language codes numbered 0,1,...' | echohl None
-    let spelllang = get(spelllangs, inputlist(spelllangs), '')
+    let s:spelllang = get(s:spelllangs, inputlist(map(copy(s:spelllangs), 'v:key . ". " . v:val')), '')
   else
-    let spelllang = &l:spelllang
+    let s:spelllang = get(s:spelllangs, 0, '')
   endif
-  let b:langtool_lang = substitute(spelllang, '_', '-', 'g')
+  let b:langtool_lang = substitute(s:spelllang, '_', '-', 'g')
   if empty(b:langtool_lang)
-    echohl WarningMsg | echomsg 'Please set &spellllang for more accurate check by LanguageTool; using autodetection instead.' | echohl None
-    if match(b:langtool_parameters, '\v\c%(\s|^)%(--autodetect|-adl)%(\s|$)') == -1
-      let b:langtool_parameters .= ' --autoDetect'
+    echohl WarningMsg | echomsg 'Please set &spelllang for more accurate check by LanguageTool; using autodetection instead.' | echohl None
+    if match(s:parameters, '\v\c%(\s|^)%(--autodetect|-adl)%(\s|$)') == -1
+      let s:parameters .= ' --autoDetect'
     endif
   else
+    " LanguageTool is slow to start, so list its languages only once.
     if !exists('s:list')
-      silent let s:list = split(system(s:langtool_cmd . ' --list'), '[[:space:]]')
+      silent let s:output = system(s:langtool_cmd . ' --list')
+      if v:shell_error == 0
+        let s:list = split(s:output, '[[:space:]]')
+      endif
+      unlet s:output
     endif
-    if match(s:list, '\c^' . b:langtool_lang . '$') == -1
+    let s:languages = get(s:, 'list', [])
+    if index(s:languages, b:langtool_lang, 0, 1) == -1
       let b:langtool_lang = matchstr(b:langtool_lang, '\v^[^-]+')
-      if match(s:list, '\c^' . b:langtool_lang . '$') == -1
-        echoerr "Language '" . b:langtool_lang . "' not listed in output of " . s:langtool_cmd . " --list; trying anyway!"
+      if index(s:languages, b:langtool_lang, 0, 1) == -1
+        echohl WarningMsg | echomsg "Language '" . b:langtool_lang . "' not listed in output of " . s:langtool_cmd . ' --list; trying anyway!' | echohl None
       endif
     endif
-    let b:langtool_parameters .= ' --language ' . b:langtool_lang
+    let s:parameters .= ' --language ' . b:langtool_lang
+    unlet s:languages
   endif
+  unlet s:spelllangs s:spelllang
 endif
 
-let &l:makeprg = 
-      \ s:langtool_cmd . ' ' . b:langtool_parameters
-let &l:errorformat =
+execute 'CompilerSet makeprg=' . escape(s:langtool_cmd . ' ' . s:parameters, ' \|"')
+execute 'CompilerSet errorformat=' . escape(
       \ '%-GPicked up _JAVA_OPTIONS: %.%#,' .
       \ '%-GExpected text language: %.%#,' .
       \ '%-PWorking on %f...,' .
@@ -69,10 +68,8 @@ let &l:errorformat =
       \ '%-C%.%#,' .
       \ '%-Z%\s%#,' .
       \ '%-Q,' .
-      \ '%-GTime: %.%#'
-silent CompilerSet makeprg
-silent CompilerSet errorformat
+      \ '%-GTime: %.%#', ' \|"')
+unlet s:parameters
 
 let &cpo = s:cpo_save
 unlet s:cpo_save
-
