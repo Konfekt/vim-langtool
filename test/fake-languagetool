@@ -1,0 +1,27 @@
+#!/bin/sh
+# Stand-in for the LanguageTool command line used by the tests.
+# Logs its arguments to $LANGTOOL_FAKE_LOG, one call per line.
+# `--list` prints the languages in $LANGTOOL_FAKE_LIST (default: en en-US de de-DE).
+# Otherwise reports one mistake at line 1, column 1 of the file argument.
+[ -n "${LANGTOOL_FAKE_LOG:-}" ] && printf '%s\n' "$*" >>"$LANGTOOL_FAKE_LOG"
+file=
+for arg; do
+  case $arg in
+    --list) for l in ${LANGTOOL_FAKE_LIST:-en en-US de de-DE}; do printf '%s Language\n' "$l"; done; exit 0 ;;
+    -*) ;;
+    *) file=$arg ;;
+  esac
+done
+[ -r "$file" ] || { echo "cannot read file: $file" >&2; exit 1; }
+echo "Expected text language: English (US)" >&2
+echo "Working on $file..." >&2
+cat <<OUT
+1.) Line 1, column 1, Rule ID: FAKE_RULE premium: false prio=0
+Message: Fake mistake.
+Suggestion: fake
+$(head -n 1 "$file")
+^^^^
+More info: https://example.invalid/
+
+Time: 1ms for 1 sentences (1.0 sentences/sec)
+OUT

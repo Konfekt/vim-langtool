@@ -26,7 +26,7 @@ set cpo&vim
 
 if !exists('g:langtool_save') | let g:langtool_save = 1 | endif
 
-command! -bar -bang LangTool silent call langtool#langtool('<bang>')
+command! -bar -bang LangTool call langtool#langtool('<bang>')
 
 " ------------------------------------------------------------------------------
 let &cpo= s:keepcpo
