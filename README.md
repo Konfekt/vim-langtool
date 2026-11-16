@@ -15,6 +15,8 @@ let g:langtool_jar = '~/LanguageTool/languagetool-commandline.jar'
 ```
 
 where the right-hand side, `~/LanguageTool/languagetool-commandline.jar`, is the path of the file `languagetool-commandline.jar`.
+Running the jar requires `java` in your `$PATH`.
+If both variables are set, `g:langtool_cmd` takes precedence.
 
 # Usage
 
@@ -53,23 +55,17 @@ To automatically run `LangTool` after saving the modifications to a text, mail o
 
 # Configuration
 
-Command-line parameters can be passed to `LanguageTool` by the global variable `g:langtool_parameters` and the buffer-local variable `b:langtool_parameters`.
+Command-line parameters can be passed to `LanguageTool` by the global variable `g:langtool_parameters` and the buffer-local variable `b:langtool_parameters`, which, if set, replaces the global one.
 By default
 
 ```vim
 let g:langtool_parameters = ''
 ```
 
-and
-
-```vim
-let b:langtool_parameters = '--autoDetect'
-```
-
 For example, the mother tongue can be set and (categories of) rules enabled and disabled by adding to your `vimrc`
 
 ```vim
-let s:enablecategories = 'CREATIVE_WRITING,WIKIPEDIA' .
+let s:enablecategories = 'CREATIVE_WRITING,WIKIPEDIA'
 let s:enable = 'PASSIVE_VOICE,TIRED_INTENSIFIERS'
 let s:disable = 'REPEATED_WORDS,REPEATED_WORDS_3X'
 
@@ -79,11 +75,8 @@ let g:langtool_parameters = ' --mothertongue de' .
       \ ' --disable ' . s:disable
 ```
 
-`:LangTool` sets the language that LanguageTool will use to that used by Vim to spellcheck by
-
-```vim
-let b:langtool_parameters = '--language ' . &l:spelllang
-```
+`:LangTool` sets the language that LanguageTool will use to that used by Vim to spellcheck, that is, it passes `--language ` followed by `&l:spelllang` (in place of any `--language` in `b:langtool_parameters`).
+If `&l:spelllang` lists several languages, then it asks which one to use (skipping `cjk`); if it is empty, then it passes `--autoDetect` instead.
 
 To avoid that the file is saved before LanguageTool checks it for mistakes,
 
@@ -106,3 +99,12 @@ see `:help errorformat`.
 
 <!-- A convenience for the user of this Vim plug-in (that its alternatives lack) is the (optional) use of Vim's job feature to that leaves Vim responsive while `LanguageTool` checks the text file in the background, which can take a while. -->
 
+
+# Tests
+
+`test/run.sh` runs the test suite headless in Vim and Neovim against a stand-in for LanguageTool.
+To also check against the real one, point `LANGTOOL_JAR` at `languagetool-commandline.jar` (with `java` in your `$PATH`):
+
+```sh
+LANGTOOL_JAR=~/LanguageTool/languagetool-commandline.jar test/run.sh
+```

@@ -20,7 +20,8 @@ Otherwise, download and unpack LanguageTool, say into the folder
   let g:langtool_jar = '~/LanguageTool/languagetool-commandline.jar'
 <
 where the right-hand side, ~/LanguageTool/languagetool-commandline.jar, is the
-path of the file languagetool-commandline.jar.
+path of the file languagetool-commandline.jar. Running the jar requires java in
+your $PATH. If both variables are set, g:langtool_cmd takes precedence.
 
 Usage ~
 
@@ -36,13 +37,13 @@ vim-unimpaired to use convenient mappings instead).
 LanguageTool runs in the background by Vim's job feature, provided a custom
 :Make command exists, such as
 
-- that of tasks.vim], or
+- that of tasks.vim, or
 - that of vim-dispatch, or
 - that defined by
 >
   command! -bang -nargs=* -complete=file Make AsyncRun<bang> -auto=make -program=make -strip <args>
 <
-  with AsyncRun.vim installed (see also the section Hints below). 
+  with AsyncRun.vim installed (see also the section Hints below).
 
 The (quickfix) window that lists the grammar mistakes can then be opened by
 `:cwindow` and they can be jumped to by `:cn` respectively `:cp`.
@@ -58,20 +59,16 @@ add to your vimrc:
 
 Configuration ~
 
-Command-line parameters can be passed to LanguageTool can be passed by the
-global variable g:langtool_parameters and the buffer-local variable
-b:langtool_parameters. By default
+Command-line parameters can be passed to LanguageTool by the global variable
+g:langtool_parameters and the buffer-local variable b:langtool_parameters,
+which, if set, replaces the global one. By default
 >
   let g:langtool_parameters = ''
-<
-and
->
-  let b:langtool_parameters = '--autoDetect'
 <
 For example, the mother tongue can be set and (categories of) rules enabled
 and disabled by adding to your vimrc
 >
-  let s:enablecategories = 'CREATIVE_WRITING,WIKIPEDIA' .
+  let s:enablecategories = 'CREATIVE_WRITING,WIKIPEDIA'
   let s:enable = 'PASSIVE_VOICE,TIRED_INTENSIFIERS'
   let s:disable = 'REPEATED_WORDS,REPEATED_WORDS_3X'
 
@@ -81,11 +78,10 @@ and disabled by adding to your vimrc
         \ ' --disable ' . s:disable
 <
 :LangTool sets the language that LanguageTool will use to that used by Vim
-to spellcheck by
->
-  let b:langtool_parameters = '--language ' . &l:spelllang
-<
-in the command line.
+to spellcheck, that is, it passes '--language ' followed by &l:spelllang (in
+place of any --language in b:langtool_parameters). If &l:spelllang lists
+several languages, then it asks which one to use (skipping cjk); if it is
+empty, then it passes --autoDetect instead.
 
 To avoid that the file is saved before LanguageTool checks it for mistakes,
 >
