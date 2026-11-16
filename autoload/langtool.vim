@@ -22,7 +22,37 @@ function! langtool#cmd_error() abort
   if exists('g:langtool_jar') && filereadable(fnamemodify(g:langtool_jar, ':p')) && !executable('java')
     return 'To use the LanguageTool compiler, Java must be installed and available in your PATH!'
   endif
+  if exists('g:langtool_cmd')
+    return 'To use the LanguageTool compiler, g:langtool_cmd (' . string(g:langtool_cmd) . ') must be an executable that starts LanguageTool in command-line!'
+  endif
   return 'To use the LanguageTool compiler, please set either g:langtool_cmd to the path of an executable that starts LanguageTool in command-line, or set g:langtool_jar to the path of languagetool-commandline.jar!'
+endfunction
+
+" Make sure the buffer is a file on disk that LanguageTool can read.
+" Returns 0 if the user declines.
+function! s:ensure_file() abort
+  if empty(&l:buftype) && !empty(bufname('%'))
+    if !filereadable(bufname('%')) && get(g:, 'langtool_save', 1)
+      silent write
+    endif
+    if filereadable(bufname('%'))
+      return 1
+    endif
+  endif
+  if input('This is not a file buffer. LangTool can only check files. Save to a temporary text file, y(es) or n(o)? ', 'y') !~? '^y'
+    return 0
+  endif
+  let tmp = tempname() . '.txt'
+  if empty(&l:buftype)
+    silent execute 'saveas' fnameescape(tmp)
+  else
+    " Special buffers (such as 'nofile' ones) cannot be saved; copy them.
+    call writefile(getline(1, '$'), tmp)
+    silent execute (&l:modified ? 'split' : 'edit') fnameescape(tmp)
+  endif
+  filetype detect
+  redraw!
+  return 1
 endfunction
 
 function! langtool#langtool(bang) abort
@@ -31,13 +61,8 @@ function! langtool#langtool(bang) abort
     return
   endif
 
-  if !(empty(&l:buftype) && filereadable(bufname('%')))
-    if input('This is not a file buffer. LangTool can only check files. Save to a temporary text file, y(es) or n(o)? ', 'y') =~? '^y'
-      silent execute 'saveas' fnameescape(tempname() . '.txt') | filetype detect
-      redraw!
-    else
-      return
-    endif
+  if !s:ensure_file()
+    return
   endif
 
   let old_compiler = get(b:, 'current_compiler', v:null)
